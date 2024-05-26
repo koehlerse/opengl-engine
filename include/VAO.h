@@ -10,7 +10,7 @@ class VAO
 		GLuint ID;
 		VAO();
 
-		void LinkVBO(VBO, GLuint layout);
+		void LinkAttrib(VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stribe, void* offset);
 		void Bind();
 		void Unbind();
 		void Delete();
