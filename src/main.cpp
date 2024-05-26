@@ -82,19 +82,27 @@ int main()
 
 
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
-
+	GLuint uniFarbeID = glGetUniformLocation(shaderProgram.ID, "farbe");
 
 
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
+	GLfloat farbwerte[] =
+	{
+		0.0f, 0.1f, 1.0f
+	};
+
+
 	while (!glfwWindowShouldClose(window))
 	{
+		const float factor = std::sin(glfwGetTime() * 5);
 		processInput(window);
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		shaderProgram.Activate();
-		glUniform1f(uniID, 0.5f);
+		glUniform1f(uniID, factor);
+		glUniform3fv(uniFarbeID, 1, farbwerte);
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 

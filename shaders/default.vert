@@ -6,6 +6,7 @@ out vec3 color;
 
 uniform float scale;
 
+
 void main()
 {
 	gl_Position = vec4(aPos + aPos * scale, 1.0);
