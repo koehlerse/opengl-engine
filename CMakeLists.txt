@@ -30,3 +30,12 @@ set_property(TARGET opengl-engine PROPERTY CXX_STANDARD 17)
 target_include_directories(opengl-engine PRIVATE 
 	"${CMAKE_SOURCE_DIR}/include"
 )
+
+add_custom_target(copy-res ALL 
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	"${CMAKE_SOURCE_DIR}/shaders"
+	"${CMAKE_BINARY_DIR}/shaders"
+	COMMENT "Shaders are getting copied"
+)
+
+add_dependencies(opengl-engine copy-res)

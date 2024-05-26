@@ -3,19 +3,10 @@
 #include <GLFW/glfw3.h>
 
 
-const char *vertexShaderSource = "#version 430 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"void main()\n"
-	"{\n"
-	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"}\0";
-
-const char *fragmentShaderSource = "#version 430 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"}\n\0";
+#include"shaderClass.h"
+#include"VAO.h"
+#include"VBO.h"
+#include"EBO.h"
 
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
@@ -75,46 +66,18 @@ int main()
 
 	glViewport(0, 0, 1280, 720);
 
+	Shader shaderProgram("shaders/default.vert", "shaders/default.frag");
 
-	GLuint  vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+	VAO VAO1;
+	VAO1.Bind();
 
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
+	VBO VBO1(vertices, sizeof(vertices));
+	EBO EBO1(indices, sizeof(indices));
 
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-
-	GLuint VAO, VBO, EBO;
-
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-
-
+	VAO1.LinkVBO(VBO1, 0);
+	VAO1.Unbind();
+	VBO1.Unbind();
+	EBO1.Unbind();
 
 
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
@@ -125,18 +88,18 @@ int main()
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO);
+		shaderProgram.Activate();
+		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	glDeleteProgram(shaderProgram);
+	VAO1.Delete();
+	VBO1.Delete();
+	EBO1.Delete();
+	shaderProgram.Delete();
 
 	glfwTerminate();
 	return 0;
