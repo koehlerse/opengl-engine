@@ -3,10 +3,10 @@
 #include <GLFW/glfw3.h>
 
 
-#include"shaderClass.h"
-#include"VAO.h"
-#include"VBO.h"
-#include"EBO.h"
+#include <shaderClass.h>
+#include <VAO.h>
+#include <VBO.h>
+#include <EBO.h>
 
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
