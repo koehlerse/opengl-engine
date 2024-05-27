@@ -31,11 +31,18 @@ target_include_directories(opengl-engine PRIVATE
 	"${CMAKE_SOURCE_DIR}/include"
 )
 
-add_custom_target(copy-res ALL 
+add_custom_target(copy-shader ALL 
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	"${CMAKE_SOURCE_DIR}/shaders"
 	"${CMAKE_BINARY_DIR}/shaders"
 	COMMENT "Shaders are getting copied"
 )
 
-add_dependencies(opengl-engine copy-res)
+add_custom_target(copy-texture ALL 
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	"${CMAKE_SOURCE_DIR}/textures"
+	"${CMAKE_BINARY_DIR}/textures"
+	COMMENT "Textures are getting copied"
+)
+
+add_dependencies(opengl-engine copy-shader copy-texture)
