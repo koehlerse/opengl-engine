@@ -29,6 +29,8 @@ set_property(TARGET opengl-engine PROPERTY CXX_STANDARD 17)
 
 target_include_directories(opengl-engine PRIVATE 
 	"${CMAKE_SOURCE_DIR}/include"
+	"${CMAKE_SOURCE_DIR}/src"
+	
 )
 
 add_custom_target(copy-shader ALL 
